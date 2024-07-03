@@ -1,0 +1,41 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Participant {
+  conference   Conference? @relation(fields: [conferenceId], references: [id])
+  conferenceId String?
+  createdAt    DateTime    @default(now())
+  email        String?
+  id           String      @id @default(cuid())
+  name         String?
+  updatedAt    DateTime    @updatedAt
+}
+
+model Conference {
+  createdAt    DateTime      @default(now())
+  description  String?
+  endTime      DateTime?
+  id           String        @id @default(cuid())
+  participants Participant[]
+  startTime    DateTime?
+  title        String?
+  updatedAt    DateTime      @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
